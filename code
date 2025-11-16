@@ -1,0 +1,104 @@
+import java.util.Scanner;
+
+// Base abstract class
+abstract class Question {
+    private String questionText;
+    private String correctAnswer;
+
+    public Question(String questionText, String correctAnswer) {
+        this.questionText = questionText;
+        this.correctAnswer = correctAnswer;
+    }
+
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    // Polymorphism – implemented differently in subclasses
+    public abstract boolean checkAnswer(String userAnswer);
+}
+
+// Multiple Choice Question
+class MultipleChoiceQuestion extends Question {
+    public MultipleChoiceQuestion(String q, String a) {
+        super(q, a);
+    }
+
+    @Override
+    public boolean checkAnswer(String userAnswer) {
+        return userAnswer.equalsIgnoreCase(getCorrectAnswer());
+    }
+}
+
+// True/False Question
+class TrueFalseQuestion extends Question {
+    public TrueFalseQuestion(String q, String a) {
+        super(q, a);
+    }
+
+    @Override
+    public boolean checkAnswer(String userAnswer) {
+        return userAnswer.equalsIgnoreCase(getCorrectAnswer());
+    }
+}
+
+// Main Exam System
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        // Array of Question objects (OOP: Array of Objects)
+        Question[] questions = new Question[4];
+
+        questions[0] = new MultipleChoiceQuestion(
+                "1. Which keyword is used to inherit a class in Java?\nA) super  B) extends  C) implements  D) import",
+                "B");
+
+        questions[1] = new TrueFalseQuestion(
+                "2. Java is a platform-independent language. (True/False)",
+                "True");
+
+        questions[2] = new MultipleChoiceQuestion(
+                "3. Which OOP principle hides internal details?\nA) Polymorphism  B) Encapsulation  C) Abstraction  D) Inheritance",
+                "B");
+
+        questions[3] = new TrueFalseQuestion(
+                "4. Constructors can return a value. (True/False)",
+                "False");
+
+        System.out.println("===== ONLINE EXAM SYSTEM =====");
+        System.out.println("Enter your name: ");
+        String name = sc.nextLine();
+
+        int score = 0;
+
+        // Running questions in a loop
+        for (Question q : questions) {
+            System.out.println("\n" + q.getQuestionText());
+            System.out.print("Your Answer: ");
+            String ans = sc.nextLine();
+
+            // Objects as arguments handled inside
+            if (q.checkAnswer(ans)) {
+                score++;
+            }
+        }
+
+        // Results
+        System.out.println("\n===== RESULT =====");
+        System.out.println("Student: " + name);
+        System.out.println("Score: " + score + "/" + questions.length);
+
+        if (score >= 3) {
+            System.out.println("Status: PASS");
+        } else {
+            System.out.println("Status: FAIL");
+        }
+    }
+}
